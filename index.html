@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toko HP Online</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            background: radial-gradient(circle, #00ffff, #ff00ff);
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            z-index: 9998;
+            transition: all 0.3s ease;
+        }
+
+        /* Glitch Effect */
+        @keyframes glitch {
+
+            0%,
+            100% {
+                transform: translate(0);
+            }
+
+            20% {
+                transform: translate(-2px, 2px);
+            }
+
+            40% {
+                transform: translate(-2px, -2px);
+            }
+
+            60% {
+                transform: translate(2px, 2px);
+            }
+
+            80% {
+                transform: translate(2px, -2px);
+            }
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite;
+        }
+
+        /* Matrix Animation */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .matrix-char {
+            position: absolute;
+            top: -100px;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 18px;
+            animation: matrixFall linear infinite;
+        }
+
+        @keyframes matrixFall {
+            0% {
+                top: -100px;
+                opacity: 1;
+            }
+
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+
+        /* Holographic Background */
+        .hologram-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, #ff006e 0%, transparent 70%),
+                radial-gradient(circle at 80% 20%, #00d2ff 0%, transparent 70%),
+                radial-gradient(circle at 40% 40%, #8a2be2 0%, transparent 70%);
+            animation: hologramShift 15s ease-in-out infinite;
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        @keyframes hologramShift {
+
+            0%,
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(13, 13, 13, 0.8), rgba(0, 45, 85, 0.8));
+            backdrop-filter: blur(20px);
+            border-bottom: 2px solid #00ffff;
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+       
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 10;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 400% 400%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleGradient 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        @keyframes titleGradient {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cyberpunk Buttons */
+        .cyber-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            margin: 15px;
+            text-decoration: none;
+            color: #00ffff;
+            background: transparent;
+            border: 2px solid #00ffff;
+            position: relative;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            clip-path: polygon(10px 0%, 100% 0, calc(100% - 10px) 100%, 0% 100%);
+        }
+
+        .cyber-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            transition: left 0.5s;
+        }
+
+        .cyber-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cyber-btn:hover {
+            color: #000;
+            box-shadow:
+                0 0 20px #00ffff,
+                inset 0 0 20px rgba(0, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .cyber-btn:hover::before {
+            left: 100%;
+        }
+
+        .cyber-btn:hover::after {
+            opacity: 1;
+        }
+
+        .cyber-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 3D Cards */
+        .features {
+            padding: 100px 0;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #000 100%);
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(0,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>');
+            opacity: 0.5;
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            perspective: 1000px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(135deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+
+        .feature-card:hover {
+            transform: rotateY(5deg) translateZ(50px);
+            box-shadow:
+                0 20px 40px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #00ffff;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            opacity: 0.9;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Geometric Shapes */
+        .geometric-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: rotate 20s linear infinite;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 87px solid #00ffff;
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+        }
+
+        .square {
+            width: 80px;
+            height: 80px;
+            background: #ff00ff;
+            transform: rotate(45deg);
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #0a0a0a, #1a1a2e);
+            padding: 60px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, #ff00ff, #00ffff, transparent);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff);
+            border-radius: 50%;
+            color: #000;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2) rotate(360deg);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+        }
+
+        .social-links a:hover::before {
+            opacity: 0.8;
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            color: #00ffff;
+            font-weight: 500;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .social-links {
+                gap: 20px;
+            }
+        }
+
+        /* Screen effects */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom,
+                    transparent 50%,
+                    rgba(0, 255, 255, 0.03) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanMove 0.5s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% {
+                transform: translateY(0px);
+            }
+
+            100% {
+                transform: translateY(4px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Scanlines Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Matrix Background -->
+    <div class="matrix-bg" id="matrix"></div>
+
+    <!-- Holographic Background -->
+    <div class="hologram-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="img/foto5.png" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <span class="glitch">Toko Online</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="geometric-shapes">
+            <div class="shape triangle" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+            <div class="shape circle" style="top: 20%; right: 10%; animation-delay: 5s;"></div>
+            <div class="shape square" style="bottom: 30%; left: 20%; animation-delay: 10s;"></div>
+            <div class="shape triangle" style="bottom: 10%; right: 30%; animation-delay: 15s;"></div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Selamat Datang Di Toko HP Online</h1>
+            <p class="hero-subtitle">Selamat Berbelanja Di Toko Kami!
+            </p>
+
+            <a href="products.html" class="cyber-btn">
+                <span><i class="fas fa-mobile-alt"></i> PRODUK HP</span>
+            </a>
+            <a href="pesan.html" class="cyber-btn">
+             <span><i class="fas fa-shopping-cart"></i> ORDER SEKARANG</span>
+            </a>
+            <a href="tentang.kami.html" class="cyber-btn">
+             <span><i class="fas fa-user-circle"></i> TENTANG KAMI</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <!-- Gratis Ongkir -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-truck"></i> <!-- Ikon truk pengiriman -->
+                </div>
+                <h3>Gratis Ongkir</h3>
+                <p>Belanja lebih hemat tanpa biaya pengiriman!</p>
+            </div>
+
+            <!-- Garansi Resmi -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i> <!-- Ikon tameng (perlindungan/garansi) -->
+                </div>
+                <h3>Garansi Resmi</h3>
+                <p>Garansi 2 Tahun
+                    Setiap pembelian HP di toko kami dilengkapi garansi resmi distributor/agen selama 24 bulan.
+                    Belanja lebih aman & terpercaya!
+                </p>
+            </div>
+
+            <!-- Layanan 24 Jam -->
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i> <!-- Ikon headset customer service -->
+                </div>
+                <h3>Layanan 24 Jam</h3>
+                <p>Layanan Pelanggan 24 Jam
+                    Siap membantu Anda kapan saja, setiap hari!</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p class="footer-text">&copy; Toko HP Online</p>
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursor.style.left = mouseX + 'px';
+            cursor.style.top = mouseY + 'px';
+        });
+
+        function animate() {
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+            follower.style.left = followerX + 'px';
+            follower.style.top = followerY + 'px';
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 3D Card Tilt Effect
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width;
+                const y = (e.clientY - rect.top) / rect.height;
+
+                const tiltX = (y - 0.5) * 10;
+                const tiltY = (x - 0.5) * -10;
+
+                card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateZ(20px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+
+        // Hover Effects for Cyber Buttons
+        document.querySelectorAll('.cyber-btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.textShadow = '0 0 20px #00ffff';
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.textShadow = 'none';
+            });
+        });
+
+        // Scroll Triggered Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Dynamic Background Color Change
+        let colorIndex = 0;
+        const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ff0066'];
+
+        setInterval(() => {
+            const currentColor = colors[colorIndex % colors.length];
+            document.documentElement.style.setProperty('--accent-color', currentColor);
+            colorIndex++;
+        }, 5000);
+
+        // Screen flicker effect
+        setInterval(() => {
+            document.body.style.filter = `brightness(${0.9 + Math.random() * 0.2})`;
+            setTimeout(() => {
+                document.body.style.filter = 'brightness(1)';
+            }, 50);
+        }, 10000);
+    </script>
+</body>
+
+</html>

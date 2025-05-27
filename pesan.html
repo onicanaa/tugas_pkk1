@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ORDER PRODUK</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4895ef;
+      --success-color: #4cc9f0;
+      --text-color: #2b2d42;
+      --light-text: #8d99ae;
+      --bg-color: #f8f9fa;
+      --card-bg: rgba(255, 255, 255, 0.9);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+      filter: brightness(0.7) contrast(1.2);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background-color: var(--card-bg);
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(10px);
+      position: relative;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary-color);
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--light-text);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 12px;
+      top: 40px;
+      color: var(--light-text);
+      font-size: 1.2rem;
+    }
+
+    input[type="email"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      font-size: 1rem;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+      transform: translateY(-2px);
+    }
+
+    #status-pesanan {
+      text-align: center;
+      color: var(--success-color);
+      background: rgba(76, 201, 240, 0.1);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .back-btn {
+      display: inline-block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      border: 2px solid var(--primary-color);
+      padding: 10px 20px;
+      border-radius: 8px;
+      transition: 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background-color: rgba(67, 97, 238, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 576px) {
+      .container {
+        padding: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<video autoplay muted loop class="background-video">
+  <source src="matrix-raining-particles.1920x1080.mp4" type="video/mp4" />
+</video>
+
+<div class="container">
+  <h2>ORDER PRODUK</h2>
+  <form id="formPengiriman" method="post">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <i class="fas fa-envelope input-icon"></i>
+      <input type="email" id="email" name="email" placeholder="Masukkan email Anda" required />
+    </div>
+    <div class="form-group">
+      <label for="nama_produk">Nama Produk</label>
+      <i class="fas fa-shopping-cart input-icon"></i>
+      <input type="text" id="nama_produk" name="nama_produk" placeholder="Masukkan nama produk" required />
+    </div>
+    <div class="form-group">
+      <label for="nomor_telpon">Nomor Telepon</label>
+      <i class="fas fa-phone input-icon"></i>
+      <input type="text" id="nomor_telpon" name="nomor_telpon" placeholder="Masukkan nomor telepon" required pattern="[0-9]{10,15}" title="Hanya angka, minimal 10 digit dan maksimal 15 digit" />
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn-submit">
+        <span>Kirim Pesanan</span>
+      </button>
+    </div>
+  </form>
+
+  <div id="status-pesanan">
+    <i class="fas fa-check-circle"></i> Pesanan berhasil diproses!
+  </div>
+
+  <div class="text-center">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Kembali ke Halaman Utama</a>
+  </div>
+</div>
+
+<!-- EmailJS Script -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  (function() {
+    emailjs.init("YOUR_PUBLIC_KEY"); // ← Ganti dengan Public Key asli dari EmailJS
+  })();
+
+  document.getElementById("formPengiriman").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = this;
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+    submitBtn.disabled = true;
+
+    emailjs.sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", form) // ← Ganti dengan Service ID & Template ID kamu
+      .then(function () {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        document.getElementById("status-pesanan").style.display = "block";
+        form.reset();
+        setTimeout(() => {
+          document.getElementById("status-pesanan").style.display = "none";
+        }, 5000);
+      }, function (error) {
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        alert("Gagal mengirim pesanan. Coba lagi nanti.");
+        console.error(error);
+      });
+  });
+</script>
+
+</body>
+</html>
